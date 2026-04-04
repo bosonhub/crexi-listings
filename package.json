@@ -1,0 +1,11 @@
+{
+  "name": "crexi-listings",
+  "version": "1.0.0",
+  "description": "Auto-updating Crexi listings page for Brian Weinhold – Vanguard Realty Group",
+  "scripts": {
+    "scrape": "node scripts/scrape.js"
+  },
+  "dependencies": {
+    "playwright": "^1.42.0"
+  }
+}

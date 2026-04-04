@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brian Weinhold – Vanguard Realty Group | Active Listings</title>
+  <style>
+    :root {
+      --navy: #1a2e4a;
+      --gold: #c9a84c;
+      --light-gold: #f5e6c0;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text: #2c3e50;
+      --muted: #6c7a89;
+      --sale-badge: #1a6b3c;
+      --lease-badge: #1a4a8a;
+      --border: #dde3ec;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 0;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 24px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--gold);
+      flex-shrink: 0;
+      background: #2a4a6a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .header-info h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header-info .subtitle {
+      color: var(--light-gold);
+      font-size: 0.95rem;
+      margin-top: 2px;
+    }
+
+    .header-info .brokerage {
+      color: var(--gold);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .header-info .meta {
+      color: #a8b8cc;
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    .header-info .meta a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .header-info .meta a:hover { text-decoration: underline; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      background: #142238;
+      border-top: 1px solid #2a4a6a;
+    }
+
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #a8b8cc;
+      font-size: 0.88rem;
+    }
+
+    .stat strong {
+      color: var(--gold);
+      font-size: 1rem;
+    }
+
+    .last-updated {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: #6a7f94;
+    }
+
+    /* ── Filters ── */
+    .filters {
+      max-width: 1200px;
+      margin: 28px auto 0;
+      padding: 0 24px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 2px solid var(--border);
+      background: white;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    .filter-btn.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      max-width: 1200px;
+      margin: 24px auto 48px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .card-header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .card-address {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-sale {
+      background: #e8f5ee;
+      color: var(--sale-badge);
+    }
+
+    .badge-lease {
+      background: #e8eef8;
+      color: var(--lease-badge);
+    }
+
+    .card-price {
+      padding: 14px 20px 10px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+
+    .card-price .price-unit {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: 2px;
+    }
+
+    .card-details {
+      padding: 0 20px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .detail-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .detail-chip strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .card-description {
+      padding: 0 20px 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .card-description.clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 9px 16px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      transition: background 0.15s ease;
+    }
+
+    .btn-primary:hover { background: #243d5e; }
+
+    .btn-secondary {
+      padding: 9px 14px;
+      background: white;
+      color: var(--navy);
+      border: 2px solid var(--navy);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      background: var(--navy);
+      color: white;
+    }
+
+    /* ── Error / Loading ── */
+    .state-msg {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--muted);
+      font-size: 1rem;
+      grid-column: 1 / -1;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy);
+      color: #a8b8cc;
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 0.82rem;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .header-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .stats-inner { gap: 16px; }
+      .last-updated { margin-left: 0; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-logo">BW</div>
+    <div class="header-info">
+      <h1>Brian Weinhold</h1>
+      <div class="subtitle">Retail/Office Specialist &nbsp;|&nbsp; 20 Years Experience</div>
+      <div class="brokerage">Vanguard Realty Group</div>
+      <div class="meta">
+        Corvallis, OR &nbsp;&bull;&nbsp; License #200510090 &nbsp;&bull;&nbsp;
+        <a href="https://www.crexi.com/profile/brian-weinhold-brianweinho" target="_blank" rel="noopener">
+          View Crexi Profile &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat"><strong id="stat-total">9</strong> Active Listings</div>
+      <div class="stat"><strong id="stat-sale">5</strong> For Sale</div>
+      <div class="stat"><strong id="stat-lease">4</strong> For Lease</div>
+      <div class="last-updated" id="last-updated">Updated: loading…</div>
+    </div>
+  </div>
+</header>
+
+<div class="filters">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" data-filter="all">All Listings</button>
+  <button class="filter-btn" data-filter="For Sale">For Sale</button>
+  <button class="filter-btn" data-filter="For Lease">For Lease</button>
+</div>
+
+<div class="grid" id="listings-grid">
+  <div class="state-msg">Loading listings…</div>
+</div>
+
+<footer>
+  Data sourced from <a href="https://www.crexi.com/profile/brian-weinhold-brianweinho" target="_blank" rel="noopener">Crexi.com</a>.
+  All information deemed reliable but not guaranteed. &copy; <span id="year"></span> Vanguard Realty Group.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Hardcoded fallback data (all 9 listings) ──
+  const FALLBACK_DATA = {
+    lastUpdated: "2026-04-04T00:00:00.000Z",
+    agent: {
+      name: "Brian Weinhold",
+      title: "Retail/Office Specialist | 20 years experience",
+      brokerage: "Vanguard Realty Group",
+      location: "Corvallis, OR",
+      license: "200510090",
+      profileUrl: "https://www.crexi.com/profile/brian-weinhold-brianweinho"
+    },
+    listings: [
+      {
+        type: "For Sale",
+        name: "Groome Transport",
+        price: "$1,250,000",
+        address: "34030 Excor Rd SW, Albany, OR 97321",
+        propertyType: "Commercial",
+        sqft: "200,000+ SqFt",
+        description: "Outstanding commercial property with excellent visibility. A rare opportunity to acquire a well-established commercial property in Albany, Oregon. This property features excellent highway visibility and access, making it ideal for a variety of commercial uses.",
+        url: "https://www.crexi.com/properties/2328017/oregon-groome-transport"
+      },
+      {
+        type: "For Sale",
+        name: "201 Roberts Creek Rd. (Lot 3)",
+        price: "$225,000",
+        address: "201 Roberts Creek Rd, Roseburg, OR 97471",
+        propertyType: "Land",
+        sqft: "N/A",
+        description: "Commercial land with flexible zoning. Excellent opportunity for commercial development in Roseburg. Flexible zoning allows for a variety of uses.",
+        url: "https://www.crexi.com/properties/1729553/oregon-roberts-creek-rd"
+      },
+      {
+        type: "For Sale",
+        name: "4807 SW Grange Rd. (Lot 2)",
+        price: "$250,000",
+        address: "4807 SW Grange Rd, Roseburg, OR 97471",
+        propertyType: "Land",
+        sqft: "N/A",
+        description: "Commercial Land with flexible zoning. Excellent commercial land opportunity in Roseburg with flexible zoning for a variety of development uses.",
+        url: "https://www.crexi.com/properties/1729545/oregon-grange-rd-2"
+      },
+      {
+        type: "For Sale",
+        name: "4885 SW Grange Road (Lot 1)",
+        price: "$225,000",
+        address: "4885 SW Grange Rd, Roseburg, OR 97471",
+        propertyType: "Land",
+        sqft: "N/A",
+        description: "Commercial Land with flexible zoning. Prime commercial land in Roseburg with flexible zoning. Ideal for a variety of commercial development projects.",
+        url: "https://www.crexi.com/properties/1729526/oregon-grange-road"
+      },
+      {
+        type: "For Sale",
+        name: "Kammerer Industrial Park",
+        price: "$5,500,000",
+        address: "720 NE Granger Ave, Corvallis, OR 97330",
+        propertyType: "Industrial",
+        sqft: "37,915 SqFt",
+        description: "Rare industrial complex featuring 10 buildings, 1 residence and storage facility, located outside city limits, sitting on 22 acres. Approximately 4 acres zoned Rural Industrial with 18 acres zoned EFU. Long term tenants keep the units full. Plenty of room to expand. Low taxes (no city taxes), water supplied by 2 wells. 240 and 440 3-phase power present. Seller carry financing available with negotiable terms.",
+        url: "https://www.crexi.com/properties/1034752/oregon-kammerer-industrial-park"
+      },
+      {
+        type: "For Lease",
+        name: "520 SW 3rd Avenue",
+        price: "$10.40/SF/YR",
+        address: "520 SW 3rd Ave, Albany, OR 97321",
+        propertyType: "Retail, Office",
+        sqft: "2,885 SqFt",
+        leaseType: "Modified Gross",
+        description: "With Downtown Mixed Use, there's not much limiting you. Your business and vision need a home so why not here? DMU allows for your medical or dental office as well as coffee shop, salon, boutique, CPA or attorney's firm. Full kitchen still intact as well as many private offices or work stations. Parking available next to building and signage may be placed in front of the building.",
+        url: "https://www.crexi.com/lease/properties/960661/oregon-commercial-office-space"
+      },
+      {
+        type: "For Lease",
+        name: "Kammerer Industrial Park Bldg J North",
+        price: "$15/SF/YR",
+        address: "720 NE Granger Ave, Corvallis, OR 97330",
+        propertyType: "Industrial",
+        sqft: "836 SqFt",
+        leaseType: "Gross",
+        description: "Industrial warehouse/flex space at the Kammerer Industrial Park, located outside city limits near Corvallis. Features 3-12' sliding doors and man door. Ideal for light manufacturing, storage, or flex industrial use.",
+        url: "https://www.crexi.com/lease/properties/942339/oregon-kammer-industrial-park-bldg-j-north"
+      },
+      {
+        type: "For Lease",
+        name: "Pacific",
+        price: "$16/SF/YR",
+        address: "2115 Pacific Blvd SW, Albany, OR 97321",
+        propertyType: "Retail, Office",
+        sqft: "1,828 SqFt",
+        leaseType: "NNN",
+        description: "Community Commercial means your business will probably work here! Zoning allows for so many options including medical, dental, retail and office. Join two national tenants in this high traffic Pacific Boulevard location near West Albany High School. Plenty of shared parking available. Owner will consider tenant improvements (TI) with long term tenancy partnership.",
+        url: "https://www.crexi.com/lease/properties/897501/oregon-pacific"
+      },
+      {
+        type: "For Lease",
+        name: "108 Clover Leaf Loop",
+        price: "$14/SF/YR",
+        address: "104 Clover Leaf Loop, Sutherlin, OR 97479",
+        propertyType: "Retail",
+        sqft: "1,604 SqFt",
+        leaseType: "NNN",
+        description: "Bring your business to this high traffic location located just off of I-5 in Sutherlin. With the changing tide to electric automobiles, locating your business next to one of the largest Tesla charging stations in the valley is a monumental advantage. Convenient and quick I-5 access — you'll be one of the first businesses they see! Next to Tesla Charging station, Subway, Starbucks, Taco Bell, Tractor Supply and more.",
+        url: "https://www.crexi.com/lease/properties/785936/oregon-108"
+      }
+    ]
+  };
+
+  let allListings = [];
+  let currentFilter = 'all';
+
+  function formatDate(isoString) {
+    try {
+      const d = new Date(isoString);
+      return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    } catch { return isoString; }
+  }
+
+  function renderListings(filter) {
+    const grid = document.getElementById('listings-grid');
+    const filtered = filter === 'all' ? allListings : allListings.filter(l => l.type === filter);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="state-msg">No listings found for this filter.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(listing => {
+      const isSale = listing.type === 'For Sale';
+      const badgeClass = isSale ? 'badge-sale' : 'badge-lease';
+      const chips = [];
+      if (listing.propertyType) chips.push(`<div class="detail-chip"><strong>Type:</strong> ${listing.propertyType}</div>`);
+      if (listing.sqft && listing.sqft !== 'N/A') chips.push(`<div class="detail-chip"><strong>Size:</strong> ${listing.sqft}</div>`);
+      if (listing.leaseType) chips.push(`<div class="detail-chip"><strong>Lease:</strong> ${listing.leaseType}</div>`);
+
+      const desc = listing.fullDescription || listing.description || '';
+
+      return `
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">${listing.name || 'Listing'}</div>
+              <div class="card-address">${listing.address || ''}</div>
+            </div>
+            <span class="badge ${badgeClass}">${listing.type}</span>
+          </div>
+          <div class="card-price">
+            ${listing.price || 'Price Upon Request'}
+          </div>
+          ${chips.length ? `<div class="card-details">${chips.join('')}</div>` : ''}
+          ${desc ? `<div class="card-description clamped">${desc}</div>` : ''}
+          <div class="card-footer">
+            ${listing.url
+              ? `<a class="btn-primary" href="${listing.url}" target="_blank" rel="noopener">View on Crexi</a>`
+              : `<span class="btn-primary" style="opacity:0.5;cursor:default;">No Link Available</span>`
+            }
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateStats(listings) {
+    document.getElementById('stat-total').textContent = listings.length;
+    document.getElementById('stat-sale').textContent = listings.filter(l => l.type === 'For Sale').length;
+    document.getElementById('stat-lease').textContent = listings.filter(l => l.type === 'For Lease').length;
+  }
+
+  function loadData(data) {
+    allListings = data.listings || [];
+    updateStats(allListings);
+    document.getElementById('last-updated').textContent =
+      'Updated: ' + (data.lastUpdated ? formatDate(data.lastUpdated) : 'Unknown');
+    renderListings(currentFilter);
+  }
+
+  // Try to fetch live listings.json; fall back to hardcoded data
+  fetch('./listings.json')
+    .then(r => {
+      if (!r.ok) throw new Error('Not found');
+      return r.json();
+    })
+    .then(data => loadData(data))
+    .catch(() => loadData(FALLBACK_DATA));
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderListings(currentFilter);
+    });
+  });
+</script>
+
+</body>
+</html>
