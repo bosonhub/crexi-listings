@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-04T05:03:27.147Z",
+  "lastUpdated": "2026-04-04T00:00:00.000Z",
   "agent": {
     "name": "Brian Weinhold",
     "title": "Retail/Office Specialist | 20 years experience",
@@ -8,5 +8,100 @@
     "license": "200510090",
     "profileUrl": "https://www.crexi.com/profile/brian-weinhold-brianweinho"
   },
-  "listings": []
+  "listings": [
+    {
+      "type": "For Sale",
+      "name": "Groome Transport",
+      "price": "$1,250,000",
+      "address": "34030 Excor Rd SW, Albany, OR 97321",
+      "propertyType": "Commercial",
+      "sqft": "200,000+ SqFt",
+      "description": "Outstanding commercial property with excellent visibility. A rare opportunity to acquire a well-established commercial property in Albany, Oregon. This property features excellent highway visibility and access, making it ideal for a variety of commercial uses.",
+      "url": "https://www.crexi.com/properties/2328017/oregon-groome-transport"
+    },
+    {
+      "type": "For Sale",
+      "name": "201 Roberts Creek Rd. (Lot 3 )",
+      "price": "$225,000",
+      "address": "201 Roberts Creek Rd, Roseburg, OR 97471",
+      "propertyType": "Land",
+      "sqft": "N/A",
+      "description": "Commercial land with flexible zoning. Excellent opportunity for commercial development in Roseburg. Flexible zoning allows for a variety of uses.",
+      "url": "https://www.crexi.com/properties/1729553/oregon-roberts-creek-rd"
+    },
+    {
+      "type": "For Sale",
+      "name": "4807 SW Grange Rd. (Lot 2 )",
+      "price": "$250,000",
+      "address": "4807 SW Grange Rd, Roseburg, OR 97471",
+      "propertyType": "Land",
+      "sqft": "N/A",
+      "description": "Commercial Land with flexible zoning. Excellent commercial land opportunity in Roseburg with flexible zoning for a variety of development uses.",
+      "url": "https://www.crexi.com/properties/1729545/oregon-grange-rd-2"
+    },
+    {
+      "type": "For Sale",
+      "name": "4885 SW Grange Road (Lot 1 )",
+      "price": "$225,000",
+      "address": "4885 SW Grange Rd, Roseburg, OR 97471",
+      "propertyType": "Land",
+      "sqft": "N/A",
+      "description": "Commercial Land with flexible zoning. Prime commercial land in Roseburg with flexible zoning. Ideal for a variety of commercial development projects.",
+      "url": "https://www.crexi.com/properties/1729526/oregon-grange-road"
+    },
+    {
+      "type": "For Sale",
+      "name": "Kammerer Industrial Park",
+      "price": "$5,500,000",
+      "address": "720 NE Granger Ave, Corvallis, OR 97330",
+      "propertyType": "Industrial",
+      "sqft": "37,915 SqFt",
+      "description": "Rare industrial complex featuring 10 buildings, 1 residence and storage facility, located outside city limits, sitting on 22 acres. Approximately 4 acres zoned Rural Industrial with 18 acres zoned EFU. Long term tenants keep the units full. Plenty of room to expand. Low taxes, water supplied by 2 wells. 240 and 440 3-phase power present. Seller carry financing available.",
+      "url": "https://www.crexi.com/properties/1034752/oregon-kammerer-industrial-park"
+    },
+    {
+      "type": "For Lease",
+      "name": "520 SW 3rd Avenue",
+      "price": "$10.40/SF/YR",
+      "address": "520 SW 3rd Ave, Albany, OR 97321",
+      "propertyType": "Retail, Office",
+      "sqft": "2,885 SqFt",
+      "leaseType": "Modified Gross",
+      "description": "With Downtown Mixed Use zoning, your business and vision need a home — why not here? DMU allows for medical or dental office, coffee shop, salon, boutique, CPA or attorney's firm. Full kitchen still intact as well as many private offices or work stations. Parking available next to building and signage may be placed in front.",
+      "url": "https://www.crexi.com/lease/properties/960661/oregon-commercial-office-space"
+    },
+    {
+      "type": "For Lease",
+      "name": "Kammerer Industrial Park Bldg J North",
+      "price": "$15/SF/YR",
+      "address": "720 NE Granger Ave, Corvallis, OR 97330",
+      "propertyType": "Industrial",
+      "sqft": "836 SqFt",
+      "leaseType": "Gross",
+      "description": "Industrial warehouse/flex space at the Kammerer Industrial Park, located outside city limits near Corvallis. Features 3 sliding doors and man door. Ideal for light manufacturing, storage, or flex industrial use.",
+      "url": "https://www.crexi.com/lease/properties/942339/oregon-kammer-industrial-park-bldg-j-north"
+    },
+    {
+      "type": "For Lease",
+      "name": "2115 Pacific Blvd SW",
+      "price": "$16/SF/YR",
+      "address": "2115 Pacific Blvd SW, Albany, OR 97321",
+      "propertyType": "Retail, Office",
+      "sqft": "1,828 SqFt",
+      "leaseType": "NNN",
+      "description": "Community Commercial zoning means your business will probably work here! Join two national tenants in this high traffic Pacific Boulevard location near West Albany High School. Plenty of shared parking available. Owner will consider tenant improvements with long term tenancy.",
+      "url": "https://www.crexi.com/lease/properties/897501/oregon-pacific"
+    },
+    {
+      "type": "For Lease",
+      "name": "108 Clover Leaf Loop",
+      "price": "$14/SF/YR",
+      "address": "104 Clover Leaf Loop, Sutherlin, OR 97479",
+      "propertyType": "Retail",
+      "sqft": "1,604 SqFt",
+      "leaseType": "NNN",
+      "description": "High traffic location just off I-5 in Sutherlin. Located next to one of the largest Tesla charging stations in the valley — next to Subway, Starbucks, Taco Bell, Tractor Supply and more. Convenient and quick I-5 access.",
+      "url": "https://www.crexi.com/lease/properties/785936/oregon-108"
+    }
+  ]
 }
