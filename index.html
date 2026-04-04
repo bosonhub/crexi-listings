@@ -364,7 +364,7 @@
       .grid { grid-template-columns: 1fr; }
     }
   </style>
-</head>
+<script type='text/javascript' src='https://private-us-east-1.manuscdn.com/T3zqEyt-uG7WO2kqKzAxNA3n5dAyxBHAcNntp8B6iob5sfWbDlBtOLraJoU7sTXa8-e1k6zR68oWZczoieBhgfVUVfgBb7x92Q42tGzYVBOkGm5TkeKF2u0tP5zcZYetlADUOKHubtlJYtHTR2cX94c--uz6QbOlq9LMREbCIzmZsSpF07ghNvL2d9z1Ghjq3h60IxvOsK1zkRr6D3Eqz6rIN8dRDToz_PBXT7YZuC--bOfBFUkuc7N_wKWnurR2Ny6dcrBLJZVrCriX84L1lxUi2JPsa3MHyEGHMwe0K5qivFk8Fz7rEdSxHc0gahVZ_iJV4FD-gjBDreVJ9KDKlp-BjMd7RnWKLrYd7d8WIAWzoKCwKM1MgOR-v0-BLdjSjMB7aOlvckSMCsUTh8hpCdiS_C0wChfmGHCBqfLv70Pv4Hl1nU0yMNd6sKzwekX3E3byc4ggZjJhebkLYJ3QSnCJkI9-l3JtyRLJg9iyOmRSnJghN3chS9Q_eiKVA3FgQKKQqB4Vd5SHQ_3E6uSRkXeiXJzl1PtDmxuFDepMKkz0fKaTNx9OCj1RDHqYPhGNbGms5o7nj3yep9l7uiEZFZfrImMrofiBPSolHulg4IKjM6uybr9p4ShJlV3WW6wWL_omUlqrkyFEzv8hMXRjbq4m_S-JXKiKNJFL5H1YZniIK1840TpVI3z16qKxYymHLnbICa6_erVlMTO_FIOjIstkau4hTCumnTdFOWoRo4Av4v1F3N9mMCz1rbmUHPQx-zTqU1zB831hkSfJSp3HvMttZE2EH9Q4bLaSIN87LyCq9qF6zCiqVq3OLojR0ZMjDQOmJciZJX7lmwhD4Y6Dwgj8ikJ0qKPmCez4T0CVJInnTi2BDvfjvmLdaMife7UjacdTnYsnBKmGvP4Y3JS2HjWNBojXWzRCBOnp1fin94imE4Th8nImzWGGTnAXt27V7qO2q3btU2u9H0eGmKWaRqWPgQupjFihHoYsP97h2XJM-CZK2VFFlSYn03Fwqn72GEe5lMnOtXD-M-QFY9cMAK6ZWKvpESk8Sb8NisLrX34_u9sZtLe9CbGNSoJs4HB8TLon_P76VX3_FTgjjJ8Fd0TgjS-szenxXxmS8TOPvTSdTN_qQjt6aCPsl-qsIj8nk_cQntrSuMbP3BOD9XR56UFPU5N89VtFdm19wQZ6NfrhSkSaXLOH-50_afOMCFDG3vej1MQaTCBslFRYzYB79qv05bOTc_k5NJpo6lw0OxLKQVKq_jtBqJMTQQFYeQtJhhxUna-FL8o5q-vElSwTwdMcNIiX3vzpA2OPAKZ1-gCYTFusfj6P_HbOYiqZw5m4-OhlQHgKAKwHKahLl4NTK8hmyc5LTiqS5LbJkfIWNCI9P2jR1LEYJeAEiKJ58SiYhIB2Wf6099ibKW6blmCM5EPAu6hxZHBFMN7LoshjMrvpdv_-Ii2a2j--R3B2mbEfcrmWUzwUCvYuMldDXYY3VbX-IRNLbDnnOolEKukpeUYIm0ahLAJu8rUsQ2GFmvA9A3J_UGfP9kaE4SyQi4BbvRDs-imxi3bSLKN2-bAo_L1MZ1rV4pMl3yzzL5s27Pc1d0DmYrvgHb9Qr1sOLJVOQ5W-jCPnLAmJpcxgoghbEYlJ7g'></script></head>
 <body>
 
 <header>
@@ -384,10 +384,10 @@
   </div>
   <div class="stats-bar">
     <div class="stats-inner">
-      <div class="stat"><strong id="stat-total">9</strong> Active Listings</div>
-      <div class="stat"><strong id="stat-sale">5</strong> For Sale</div>
-      <div class="stat"><strong id="stat-lease">4</strong> For Lease</div>
-      <div class="last-updated" id="last-updated">Updated: loading…</div>
+      <div class="stat"><strong id="stat-total">0</strong> Active Listings</div>
+      <div class="stat"><strong id="stat-sale">0</strong> For Sale</div>
+      <div class="stat"><strong id="stat-lease">0</strong> For Lease</div>
+      <div class="last-updated" id="last-updated">Loading…</div>
     </div>
   </div>
 </header>
@@ -411,115 +411,6 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ── Hardcoded fallback data (all 9 listings) ──
-  const FALLBACK_DATA = {
-    lastUpdated: "2026-04-04T00:00:00.000Z",
-    agent: {
-      name: "Brian Weinhold",
-      title: "Retail/Office Specialist | 20 years experience",
-      brokerage: "Vanguard Realty Group",
-      location: "Corvallis, OR",
-      license: "200510090",
-      profileUrl: "https://www.crexi.com/profile/brian-weinhold-brianweinho"
-    },
-    listings: [
-      {
-        type: "For Sale",
-        name: "Groome Transport",
-        price: "$1,250,000",
-        address: "34030 Excor Rd SW, Albany, OR 97321",
-        propertyType: "Commercial",
-        sqft: "200,000+ SqFt",
-        description: "Outstanding commercial property with excellent visibility. A rare opportunity to acquire a well-established commercial property in Albany, Oregon. This property features excellent highway visibility and access, making it ideal for a variety of commercial uses.",
-        url: "https://www.crexi.com/properties/2328017/oregon-groome-transport"
-      },
-      {
-        type: "For Sale",
-        name: "201 Roberts Creek Rd. (Lot 3)",
-        price: "$225,000",
-        address: "201 Roberts Creek Rd, Roseburg, OR 97471",
-        propertyType: "Land",
-        sqft: "N/A",
-        description: "Commercial land with flexible zoning. Excellent opportunity for commercial development in Roseburg. Flexible zoning allows for a variety of uses.",
-        url: "https://www.crexi.com/properties/1729553/oregon-roberts-creek-rd"
-      },
-      {
-        type: "For Sale",
-        name: "4807 SW Grange Rd. (Lot 2)",
-        price: "$250,000",
-        address: "4807 SW Grange Rd, Roseburg, OR 97471",
-        propertyType: "Land",
-        sqft: "N/A",
-        description: "Commercial Land with flexible zoning. Excellent commercial land opportunity in Roseburg with flexible zoning for a variety of development uses.",
-        url: "https://www.crexi.com/properties/1729545/oregon-grange-rd-2"
-      },
-      {
-        type: "For Sale",
-        name: "4885 SW Grange Road (Lot 1)",
-        price: "$225,000",
-        address: "4885 SW Grange Rd, Roseburg, OR 97471",
-        propertyType: "Land",
-        sqft: "N/A",
-        description: "Commercial Land with flexible zoning. Prime commercial land in Roseburg with flexible zoning. Ideal for a variety of commercial development projects.",
-        url: "https://www.crexi.com/properties/1729526/oregon-grange-road"
-      },
-      {
-        type: "For Sale",
-        name: "Kammerer Industrial Park",
-        price: "$5,500,000",
-        address: "720 NE Granger Ave, Corvallis, OR 97330",
-        propertyType: "Industrial",
-        sqft: "37,915 SqFt",
-        description: "Rare industrial complex featuring 10 buildings, 1 residence and storage facility, located outside city limits, sitting on 22 acres. Approximately 4 acres zoned Rural Industrial with 18 acres zoned EFU. Long term tenants keep the units full. Plenty of room to expand. Low taxes (no city taxes), water supplied by 2 wells. 240 and 440 3-phase power present. Seller carry financing available with negotiable terms.",
-        url: "https://www.crexi.com/properties/1034752/oregon-kammerer-industrial-park"
-      },
-      {
-        type: "For Lease",
-        name: "520 SW 3rd Avenue",
-        price: "$10.40/SF/YR",
-        address: "520 SW 3rd Ave, Albany, OR 97321",
-        propertyType: "Retail, Office",
-        sqft: "2,885 SqFt",
-        leaseType: "Modified Gross",
-        description: "With Downtown Mixed Use, there's not much limiting you. Your business and vision need a home so why not here? DMU allows for your medical or dental office as well as coffee shop, salon, boutique, CPA or attorney's firm. Full kitchen still intact as well as many private offices or work stations. Parking available next to building and signage may be placed in front of the building.",
-        url: "https://www.crexi.com/lease/properties/960661/oregon-commercial-office-space"
-      },
-      {
-        type: "For Lease",
-        name: "Kammerer Industrial Park Bldg J North",
-        price: "$15/SF/YR",
-        address: "720 NE Granger Ave, Corvallis, OR 97330",
-        propertyType: "Industrial",
-        sqft: "836 SqFt",
-        leaseType: "Gross",
-        description: "Industrial warehouse/flex space at the Kammerer Industrial Park, located outside city limits near Corvallis. Features 3-12' sliding doors and man door. Ideal for light manufacturing, storage, or flex industrial use.",
-        url: "https://www.crexi.com/lease/properties/942339/oregon-kammer-industrial-park-bldg-j-north"
-      },
-      {
-        type: "For Lease",
-        name: "Pacific",
-        price: "$16/SF/YR",
-        address: "2115 Pacific Blvd SW, Albany, OR 97321",
-        propertyType: "Retail, Office",
-        sqft: "1,828 SqFt",
-        leaseType: "NNN",
-        description: "Community Commercial means your business will probably work here! Zoning allows for so many options including medical, dental, retail and office. Join two national tenants in this high traffic Pacific Boulevard location near West Albany High School. Plenty of shared parking available. Owner will consider tenant improvements (TI) with long term tenancy partnership.",
-        url: "https://www.crexi.com/lease/properties/897501/oregon-pacific"
-      },
-      {
-        type: "For Lease",
-        name: "108 Clover Leaf Loop",
-        price: "$14/SF/YR",
-        address: "104 Clover Leaf Loop, Sutherlin, OR 97479",
-        propertyType: "Retail",
-        sqft: "1,604 SqFt",
-        leaseType: "NNN",
-        description: "Bring your business to this high traffic location located just off of I-5 in Sutherlin. With the changing tide to electric automobiles, locating your business next to one of the largest Tesla charging stations in the valley is a monumental advantage. Convenient and quick I-5 access — you'll be one of the first businesses they see! Next to Tesla Charging station, Subway, Starbucks, Taco Bell, Tractor Supply and more.",
-        url: "https://www.crexi.com/lease/properties/785936/oregon-108"
-      }
-    ]
-  };
-
   let allListings = [];
   let currentFilter = 'all';
 
@@ -530,54 +421,40 @@
     } catch { return isoString; }
   }
 
-  function renderListings(filter) {
-    const grid = document.getElementById('listings-grid');
-    const filtered = filter === 'all' ? allListings : allListings.filter(l => l.type === filter);
-
-    if (filtered.length === 0) {
-      grid.innerHTML = '<div class="state-msg">No listings found for this filter.</div>';
-      return;
-    }
-
-    grid.innerHTML = filtered.map(listing => {
-      const isSale = listing.type === 'For Sale';
-      const badgeClass = isSale ? 'badge-sale' : 'badge-lease';
-      const chips = [];
-      if (listing.propertyType) chips.push(`<div class="detail-chip"><strong>Type:</strong> ${listing.propertyType}</div>`);
-      if (listing.sqft && listing.sqft !== 'N/A') chips.push(`<div class="detail-chip"><strong>Size:</strong> ${listing.sqft}</div>`);
-      if (listing.leaseType) chips.push(`<div class="detail-chip"><strong>Lease:</strong> ${listing.leaseType}</div>`);
-
-      const desc = listing.fullDescription || listing.description || '';
-
-      return `
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">${listing.name || 'Listing'}</div>
-              <div class="card-address">${listing.address || ''}</div>
-            </div>
-            <span class="badge ${badgeClass}">${listing.type}</span>
-          </div>
-          <div class="card-price">
-            ${listing.price || 'Price Upon Request'}
-          </div>
-          ${chips.length ? `<div class="card-details">${chips.join('')}</div>` : ''}
-          ${desc ? `<div class="card-description clamped">${desc}</div>` : ''}
-          <div class="card-footer">
-            ${listing.url
-              ? `<a class="btn-primary" href="${listing.url}" target="_blank" rel="noopener">View on Crexi</a>`
-              : `<span class="btn-primary" style="opacity:0.5;cursor:default;">No Link Available</span>`
-            }
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
   function updateStats(listings) {
     document.getElementById('stat-total').textContent = listings.length;
     document.getElementById('stat-sale').textContent = listings.filter(l => l.type === 'For Sale').length;
     document.getElementById('stat-lease').textContent = listings.filter(l => l.type === 'For Lease').length;
+  }
+
+  function renderListings(filter) {
+    const grid = document.getElementById('listings-grid');
+    const filtered = filter === 'all' ? allListings : allListings.filter(l => l.type === filter);
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="state-msg">No listings currently available. Please check back soon.</div>';
+      return;
+    }
+    grid.innerHTML = filtered.map(listing => {
+      const badgeClass = listing.type === 'For Sale' ? 'badge-sale' : 'badge-lease';
+      const chips = [];
+      if (listing.propertyType) chips.push('<div class="detail-chip"><strong>Type:</strong> ' + listing.propertyType + '</div>');
+      if (listing.sqft && listing.sqft !== 'N/A') chips.push('<div class="detail-chip"><strong>Size:</strong> ' + listing.sqft + '</div>');
+      if (listing.leaseType) chips.push('<div class="detail-chip"><strong>Lease:</strong> ' + listing.leaseType + '</div>');
+      const desc = listing.fullDescription || listing.description || '';
+      return '<div class="card">' +
+        '<div class="card-header"><div>' +
+        '<div class="card-title">' + (listing.name || 'Listing') + '</div>' +
+        '<div class="card-address">' + (listing.address || '') + '</div>' +
+        '</div><span class="badge ' + badgeClass + '">' + listing.type + '</span></div>' +
+        '<div class="card-price">' + (listing.price || 'Price Upon Request') + '</div>' +
+        (chips.length ? '<div class="card-details">' + chips.join('') + '</div>' : '') +
+        (desc ? '<div class="card-description clamped">' + desc + '</div>' : '') +
+        '<div class="card-footer">' +
+        (listing.url
+          ? '<a class="btn-primary" href="' + listing.url + '" target="_blank" rel="noopener">View on Crexi</a>'
+          : '<span class="btn-primary" style="opacity:0.5;cursor:default;">No Link Available</span>') +
+        '</div></div>';
+    }).join('');
   }
 
   function loadData(data) {
@@ -588,16 +465,18 @@
     renderListings(currentFilter);
   }
 
-  // Try to fetch live listings.json; fall back to hardcoded data
   fetch('./listings.json')
-    .then(r => {
-      if (!r.ok) throw new Error('Not found');
-      return r.json();
-    })
+    .then(r => { if (!r.ok) throw new Error('Not found'); return r.json(); })
     .then(data => loadData(data))
-    .catch(() => loadData(FALLBACK_DATA));
+    .catch(() => {
+      document.getElementById('listings-grid').innerHTML =
+        '<div class="state-msg">No listings currently available. Please check back soon.</div>';
+      document.getElementById('stat-total').textContent = '0';
+      document.getElementById('stat-sale').textContent = '0';
+      document.getElementById('stat-lease').textContent = '0';
+      document.getElementById('last-updated').textContent = '';
+    });
 
-  // Filter buttons
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
