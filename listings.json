@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-04T05:42:58.453Z",
+  "lastUpdated": "2026-05-13T08:37:07.016Z",
   "agent": {
     "name": "Brian Weinhold",
     "title": "Retail/Office Specialist | 20 years experience",
@@ -8,5 +8,78 @@
     "license": "200510090",
     "profileUrl": "https://www.crexi.com/profile/brian-weinhold-brianweinho"
   },
-  "listings": []
+  "listings": [
+    {
+      "type": "For Sale",
+      "name": "Groome Transport",
+      "price": "",
+      "address": "34030 Excor Rd SW\nAlbany, OR 97321",
+      "description": "Outstanding commercial property with excellent visibility",
+      "url": "https://www.crexi.com/properties/2328017/oregon-groome-transport"
+    },
+    {
+      "type": "For Sale",
+      "name": "201 Roberts Creek Rd. (Lot 3)",
+      "price": "",
+      "address": "201 Roberts Creek Rd\nRoseburg, OR 97471",
+      "description": "Commercial land with flexible zoning",
+      "url": "https://www.crexi.com/properties/1729553/oregon-roberts-creek-rd"
+    },
+    {
+      "type": "For Sale",
+      "name": "4807 SW Grange Rd. (Lot 2)",
+      "price": "",
+      "address": "4807 SW Grange Rd\nRoseburg, OR 97471",
+      "description": "Commercial Land with flexible zoning",
+      "url": "https://www.crexi.com/properties/1729545/oregon-grange-rd-2"
+    },
+    {
+      "type": "For Sale",
+      "name": "4885 SW Grange Road (Lot 1)",
+      "price": "",
+      "address": "4885 SW Grange Rd\nRoseburg, OR 97471",
+      "description": "Commercial Land with flexible zoning",
+      "url": "https://www.crexi.com/properties/1729526/oregon-grange-road"
+    },
+    {
+      "type": "For Sale",
+      "name": "Kammerer Industrial Park",
+      "price": "",
+      "address": "720 NW Granger Ave\nCorvallis, OR 97330",
+      "description": "Industrial Complex near Corvallis Oregon",
+      "url": "https://www.crexi.com/properties/1034752/oregon-kammerer-industrial-park"
+    },
+    {
+      "type": "For Lease",
+      "name": "520 SW 3rd Avenue",
+      "price": "",
+      "address": "520 SW 3rd Ave\nAlbany, OR 97321",
+      "description": "Retail • Single tenant • 2,885 SqFt",
+      "url": "https://www.crexi.com/lease/properties/960661/oregon-commercial-office-space"
+    },
+    {
+      "type": "For Lease",
+      "name": "Kammer Industrial Park Bldg J North",
+      "price": "",
+      "address": "720 NE Granger Ave\nCorvallis, OR 97330",
+      "description": "Industrial • Single tenant • 836 SqFt",
+      "url": "https://www.crexi.com/lease/properties/942339/oregon-kammer-industrial-park-bldg-j-north"
+    },
+    {
+      "type": "For Lease",
+      "name": "Pacific",
+      "price": "",
+      "address": "2115 Pacific Blvd SW\nAlbany, OR 97321",
+      "description": "Retail • Single tenant • 1,828 SqFt",
+      "url": "https://www.crexi.com/lease/properties/897501/oregon-pacific"
+    },
+    {
+      "type": "For Lease",
+      "name": "108 Clover Leaf Loop",
+      "price": "",
+      "address": "104 Clover Leaf Loop\nSutherlin, OR 97479",
+      "description": "Retail • Single tenant • 1,604 SqFt",
+      "url": "https://www.crexi.com/lease/properties/785936/oregon-108"
+    }
+  ]
 }
