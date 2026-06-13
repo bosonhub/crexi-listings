@@ -27,7 +27,7 @@ jobs:
         run: npm install
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
+        run: npx patchwright install chromium --with-deps
 
       - name: Run scraper
         run: node scripts/scrape.js
