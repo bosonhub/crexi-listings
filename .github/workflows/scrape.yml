@@ -26,8 +26,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Playwright browsers
-        run: npx patchwright install chromium --with-deps
+      - name: Install Patchright browser (stealth Chromium )
+        run: npx patchright install chromium --with-deps
 
       - name: Run scraper
         run: node scripts/scrape.js
