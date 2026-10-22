@@ -1,272 +1,136 @@
-/**
- * Crexi Listings Scraper — Vanguard Realty Group
- * Uses Patchright (patched Playwright) for stealth bot-detection bypass.
- * Scrapes Brian Weinhold's Crexi profile for active listings,
- * then visits each listing page to extract the primary property image URL.
- *
- * Output: listings.json with full listing data including image URLs.
- */
+/** Brian's featured listings only. No bypasses; fail closed on blocked/incomplete pages. */
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const PROFILE = 'https://www.crexi.com/profile/brian-weinhold-brianweinho';
+const ROOT = path.resolve(__dirname, '..');
+const OUTPUT = path.join(ROOT, 'listings.json');
+const STATUS = path.join(ROOT, 'scrape-status.json');
+const FLAG = path.join(ROOT, '.scraper_updated');
+const TYPES = ['For Sale', 'For Lease'];
 
-const { chromium } = require('patchright');
-const fs = require('fs');
-const path = require('path');
-
-const PROFILE_URL = 'https://www.crexi.com/profile/brian-weinhold-brianweinho';
-const OUTPUT_PATH = path.join(__dirname, '..', 'listings.json');
-
-// ── Stealth context options ────────────────────────────────────────────────
-const CONTEXT_OPTIONS = {
-  userAgent:
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  viewport: { width: 1440, height: 900 },
-  locale: 'en-US',
-  timezoneId: 'America/Los_Angeles',
-  extraHTTPHeaders: {
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
-  },
-};
-
-// ── Image extraction helper ────────────────────────────────────────────────
-/**
- * Visit a single Crexi listing page and extract the primary property image URL.
- * Returns null if no image is found or the page fails to load.
- */
-async function extractListingImage(browser, listingUrl) {
-  if (!listingUrl) return null;
-
-  let ctx;
-  try {
-    ctx = await browser.newContext(CONTEXT_OPTIONS);
-    const page = await ctx.newPage();
-
-    console.log(`  → Fetching image from: ${listingUrl}`);
-    await page.goto(listingUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
-
-    // Wait for React SPA to render images
-    await page.waitForTimeout(4000);
-
-    // Try to find the largest property image from the Crexi CDN
-    const imageUrl = await page.evaluate(() => {
-      const imgs = Array.from(document.querySelectorAll('img'));
-      const cxImgs = imgs
-        .filter(img =>
-          img.src &&
-          img.src.includes('images.crexi.com') &&
-          img.naturalWidth > 200 &&
-          img.naturalHeight > 150
-        )
-        .sort((a, b) => (b.naturalWidth * b.naturalHeight) - (a.naturalWidth * a.naturalHeight));
-
-      if (cxImgs.length > 0) {
-        // Upgrade to a larger size variant
-        return cxImgs[0].src.replace(/_\d+x\d+_resize/, '_undefinedx600_resize');
-      }
-
-      // Fallback: look for og:image meta tag
-      const ogImage = document.querySelector('meta[property="og:image"]');
-      if (ogImage && ogImage.content && ogImage.content.includes('crexi')) {
-        return ogImage.content;
-      }
-
-      return null;
-    });
-
-    await ctx.close();
-    return imageUrl || null;
-
-  } catch (e) {
-    console.warn(`  ⚠️  Could not extract image from ${listingUrl}: ${e.message}`);
-    if (ctx) { try { await ctx.close(); } catch (_) {} }
-    return null;
-  }
+function listingURL(value) {
+  const url = new URL(value, PROFILE);
+  if (url.protocol !== 'https:' || !['www.crexi.com', 'crexi.com'].includes(url.hostname) ||
+      !/^\/(?:lease\/)?properties\/\d+\//.test(url.pathname)) throw new Error('Invalid listing URL');
+  url.search = ''; url.hash = ''; return url.href;
 }
-
-// ── Main scraper ───────────────────────────────────────────────────────────
-async function scrapeListings() {
-  console.log('Launching Patchright (stealth Chromium)...');
-  const browser = await chromium.launch({
-    headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-    ],
-  });
-
-  const context = await browser.newContext(CONTEXT_OPTIONS);
-  const page = await context.newPage();
-  const listings = [];
-
-  try {
-    console.log('Navigating to Crexi profile...');
-    await page.goto(PROFILE_URL, { waitUntil: 'networkidle', timeout: 90000 });
-    await page.waitForTimeout(5000);
-
-    // Check if page loaded with actual content
-    const pageContent = await page.content();
-    if (
-      !pageContent.includes('brian') &&
-      !pageContent.includes('Weinhold') &&
-      !pageContent.includes('crexi')
-    ) {
-      console.warn('⚠️  Page content does not appear to contain profile data — possible bot block.');
-      await browser.close();
-      return null;
-    }
-
-    // ── Scrape For Sale listings ──
-    console.log('Scraping For Sale listings...');
-    try {
-      const forSaleTab = page.locator('[id="mat-tab-group-0-label-0"]');
-      await forSaleTab.click();
-      await page.waitForTimeout(3000);
-
-      const forSaleCards = await page.locator('mat-tab-group').first().locator('cui-card').all();
-      console.log(`Found ${forSaleCards.length} For Sale cards`);
-
-      for (const card of forSaleCards) {
-        try {
-          const linkEl = card.locator('a').first();
-          const href = await linkEl.getAttribute('href').catch(() => null);
-          const url = href ? `https://www.crexi.com${href}` : null;
-
-          const priceEl = card.locator('.price, [class*="price"]').first();
-          const price = await priceEl.innerText().catch(() => '');
-
-          const nameEl = card.locator('h5, h4, .name, [class*="name"]').first();
-          const name = await nameEl.innerText().catch(() => '');
-
-          const descEl = card.locator('p, .description, [class*="description"]').first();
-          const description = await descEl.innerText().catch(() => '');
-
-          const addressEl = card.locator('h4, .address, [class*="address"]').first();
-          const address = await addressEl.innerText().catch(() => '');
-
-          if (url || name || price) {
-            listings.push({
-              type: 'For Sale',
-              name: name.trim(),
-              price: price.trim(),
-              address: address.trim(),
-              description: description.trim(),
-              url: url || '',
-              image: null,
-            });
-          }
-        } catch (e) {
-          console.warn('Error parsing For Sale card:', e.message);
-        }
-      }
-    } catch (e) {
-      console.warn('Error scraping For Sale tab:', e.message);
-    }
-
-    // ── Scrape For Lease listings ──
-    console.log('Scraping For Lease listings...');
-    try {
-      const forLeaseTab = page.locator('[id="mat-tab-group-0-label-1"]');
-      await forLeaseTab.click();
-      await page.waitForTimeout(3000);
-
-      const forLeaseCards = await page.locator('mat-tab-group').first().locator('cui-card').all();
-      console.log(`Found ${forLeaseCards.length} For Lease cards`);
-
-      for (const card of forLeaseCards) {
-        try {
-          const linkEl = card.locator('a').first();
-          const href = await linkEl.getAttribute('href').catch(() => null);
-          const url = href ? `https://www.crexi.com${href}` : null;
-
-          const priceEl = card.locator('.price, [class*="price"]').first();
-          const price = await priceEl.innerText().catch(() => '');
-
-          const nameEl = card.locator('h5, h4, .name, [class*="name"]').first();
-          const name = await nameEl.innerText().catch(() => '');
-
-          const descEl = card.locator('p, .description, [class*="description"]').first();
-          const description = await descEl.innerText().catch(() => '');
-
-          const addressEl = card.locator('h4, .address, [class*="address"]').first();
-          const address = await addressEl.innerText().catch(() => '');
-
-          if (url || name || price) {
-            listings.push({
-              type: 'For Lease',
-              name: name.trim(),
-              price: price.trim(),
-              address: address.trim(),
-              description: description.trim(),
-              url: url || '',
-              image: null,
-            });
-          }
-        } catch (e) {
-          console.warn('Error parsing For Lease card:', e.message);
-        }
-      }
-    } catch (e) {
-      console.warn('Error scraping For Lease tab:', e.message);
-    }
-
-  } catch (e) {
-    console.error('Fatal scrape error:', e.message);
-  } finally {
-    await context.close();
+function validate(listings, completed) {
+  if (!TYPES.every(type => completed.includes(type))) throw new Error('Incomplete sale/lease collection; previous data retained');
+  if (!listings.length) throw new Error('No verified listings; previous data retained');
+  const seen = new Set();
+  for (const item of listings) {
+    if (!TYPES.includes(item.type) || !item.name?.trim() || !item.address?.trim()) throw new Error('Incomplete listing fields');
+    item.url = listingURL(item.url);
+    const key = item.type + ':' + item.url;
+    if (seen.has(key)) throw new Error('Duplicate listing; possible tab/pagination failure');
+    seen.add(key);
   }
-
-  // ── Image extraction pass ──────────────────────────────────────────────
-  if (listings.length > 0) {
-    console.log(`\nExtracting images for ${listings.length} listings...`);
-    for (let i = 0; i < listings.length; i++) {
-      const listing = listings[i];
-      if (listing.url) {
-        listing.image = await extractListingImage(browser, listing.url);
-        console.log(`  [${i + 1}/${listings.length}] ${listing.name}: ${listing.image ? '✅ image found' : '❌ no image'}`);
-        if (i < listings.length - 1) {
-          await new Promise(r => setTimeout(r, 2500));
-        }
-      }
-    }
-  }
-
-  await browser.close();
   return listings;
 }
-
-// ── Entry point ────────────────────────────────────────────────────────────
-(async () => {
-  const listings = await scrapeListings();
-
-  if (listings === null || listings.length === 0) {
-    console.warn('⚠️  Scraper returned no listings — Crexi may have blocked the request.');
-    console.warn('⚠️  Keeping existing listings.json unchanged to preserve current data.');
-    process.exit(0);
+function categories(text) {
+  const rules = {office:/\boffice\b/i, industrial:/\b(industrial|warehouse|manufacturing)\b/i,
+    retail:/\b(retail|storefront|shopping)\b/i, 'multi-family':/\b(multi[ -]?family|apartment|duplex|triplex)\b/i, land:/\b(land|acreage)\b/i};
+  return Object.keys(rules).filter(key => rules[key].test(text));
+}
+function atomicJSON(filename, value) {
+  const temporary = filename + '.tmp';
+  fs.writeFileSync(temporary, JSON.stringify(value, null, 2) + '\n');
+  fs.renameSync(temporary, filename);
+}
+async function assertAccessible(page) {
+  const text = await page.locator('body').innerText();
+  if (/verify (?:you are|that you are) human|access denied|unusual traffic|checking your browser|captcha/i.test(text)) {
+    throw new Error('Source requires human verification or blocks access. No bypass attempted.');
   }
-
-  console.log(`\n✅ Scraped ${listings.length} listings total.`);
-  const withImages = listings.filter(l => l.image).length;
-  console.log(`📸 ${withImages} listings have images, ${listings.length - withImages} do not.`);
-
-  const output = {
-    lastUpdated: new Date().toISOString(),
-    agent: {
-      name: 'Brian Weinhold',
-      title: 'Retail/Office Specialist | 20 years experience',
-      brokerage: 'Vanguard Realty Group',
-      location: 'Corvallis, OR',
-      license: '201213216',
-      profileUrl: 'https://www.crexi.com/profile/brian-weinhold-brianweinho',
-    },
-    listings,
-  };
-
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2));
-  console.log(`Listings saved to ${OUTPUT_PATH}`);
-
-  const flagPath = path.join(__dirname, '..', '.scraper_updated');
-  fs.writeFileSync(flagPath, new Date().toISOString());
-  console.log('Flag file written — workflow will commit the updated listings.');
-})();
+  if (!/Weinhold/i.test(text)) throw new Error('Profile did not render verified Brian Weinhold content');
+}
+async function main() {
+  fs.rmSync(FLAG, {force:true});
+  const started = new Date().toISOString();
+  let browser, page;
+  try {
+    const { chromium } = require('playwright');
+    browser = await chromium.launch({headless:true});
+    const context = await browser.newContext({viewport:{width:1440,height:900}, locale:'en-US'});
+    page = await context.newPage();
+    page.setDefaultTimeout(20000);
+    const response = await page.goto(PROFILE, {waitUntil:'domcontentloaded', timeout:60000});
+    if (!response?.ok()) throw new Error('Profile HTTP status ' + response?.status());
+    await page.getByText(/Brian Weinhold/i).first().waitFor({state:'visible', timeout:30000});
+    await assertAccessible(page);
+    const listings = [], completed = [];
+    for (const type of TYPES) {
+      // Accessible names survive Angular's generated tab IDs changing.
+      const tab = page.getByRole('tab', {name:new RegExp(type, 'i')});
+      if (await tab.count() !== 1) throw new Error('Could not uniquely identify ' + type + ' tab');
+      await tab.click();
+      await page.waitForFunction(label => [...document.querySelectorAll('[role="tab"]')]
+        .some(el => el.getAttribute('aria-selected') === 'true' && el.textContent.includes(label)), type);
+      const panel = page.getByRole('tabpanel').filter({visible:true});
+      if (await panel.count() !== 1) throw new Error('Could not identify active listing panel');
+      // Wait for actual cards, not an arbitrary network-idle state or fixed sleep.
+      await panel.locator('cui-card').first().waitFor({state:'visible', timeout:30000});
+      await assertAccessible(page);
+      const raw = await panel.locator('cui-card').evaluateAll(cards => cards.map(card => {
+        const text = selectors => card.querySelector(selectors)?.textContent?.trim() || '';
+        const link = card.querySelector('a[href*="/properties/"]');
+        const image = card.querySelector('img');
+        return {name:text('h5, .name, [class*="name"]'),
+          price:text('.price, [class*="price"]'), address:text('h4, .address, [class*="address"]'),
+          description:text('p, .description, [class*="description"]'),
+          propertyType:text('[class*="property-type"], [class*="propertyType"]'),
+          url:link?.href || '', image:image?.currentSrc || image?.src || null};
+      }));
+      // Do not publish a single page as a complete feed if pagination is present.
+      const more = panel.getByRole('button', {name:/^(next(?: page)?|load more|show more)$/i});
+      for (const button of await more.all()) if (await button.isVisible() && await button.isEnabled()) {
+        throw new Error('Additional listing pages detected; publication stopped to prevent truncation');
+      }
+      const count = (await tab.innerText()).match(/\((\d+)\)/);
+      if (count && Number(count[1]) !== raw.length) throw new Error(type + ' count does not match rendered cards');
+      for (const item of raw) {
+        item.url = listingURL(item.url);
+        if ((type === 'For Lease') !== item.url.includes('/lease/properties/')) throw new Error('Listing does not match active tab');
+        listings.push({...item, type, category:categories(item.propertyType)});
+      }
+      completed.push(type);
+    }
+    validate(listings, completed);
+    const previous = fs.existsSync(OUTPUT) ? JSON.parse(fs.readFileSync(OUTPUT, 'utf8')) : {};
+    if (previous.listings?.length && listings.length < previous.listings.length * 0.6) {
+      throw new Error('Listing count dropped by more than 40%; requires review before publishing');
+    }
+    const output = {lastUpdated:new Date().toISOString(), coverage:'Brian Weinhold featured listings only; not all-market inventory',
+      agent:previous.agent || {name:'Brian Weinhold',brokerage:'Vanguard Realty Group',profileUrl:PROFILE}, listings};
+    const dryRun = process.env.DRY_RUN === 'true';
+    if (!dryRun) { atomicJSON(OUTPUT, output); fs.writeFileSync(FLAG, output.lastUpdated); }
+    else atomicJSON(path.join(ROOT, 'listings-candidate.json'), output);
+    atomicJSON(STATUS, {attemptedAt:started, status:dryRun?'validated-dry-run':'success', count:listings.length,
+      lastSuccessfulUpdate:dryRun ? previous.lastUpdated || null : output.lastUpdated});
+    console.log(`${dryRun ? 'Validated candidate' : 'Published'} ${listings.length} listings`);
+  } catch (error) {
+    atomicJSON(STATUS, {attemptedAt:started,status:'failed',message:error.message,previousDataRetained:true});
+    fs.mkdirSync(path.join(ROOT,'diagnostics'),{recursive:true});
+    if (page) await page.screenshot({path:path.join(ROOT,'diagnostics','source-failure.png'),fullPage:true}).catch(()=>{});
+    console.error('Scrape failed; listings.json is unchanged:', error.message);
+    process.exitCode = 1;
+  } finally { if (browser) await browser.close(); }
+}
+function selfTest() {
+  const assert = require('node:assert/strict');
+  assert.equal(listingURL('/properties/123/oregon-office'), 'https://www.crexi.com/properties/123/oregon-office');
+  assert.equal(listingURL('https://www.crexi.com/properties/123/oregon-office?ref=test'), 'https://www.crexi.com/properties/123/oregon-office');
+  assert.throws(()=>listingURL('https://example.com/properties/123/fake'));
+  assert.throws(()=>validate([], TYPES));
+  const item={type:'For Sale',name:'Test',address:'123 Main St',url:'/properties/123/oregon-office'};
+  assert.throws(()=>validate([{...item}], ['For Sale']));
+  assert.throws(()=>validate([{...item},{...item}], TYPES));
+  assert.throws(()=>validate([{...item,address:''}], TYPES));
+  assert.equal(validate([{...item}], TYPES).length, 1);
+  assert.deepEqual(categories('Retail / Office'), ['office','retail']);
+  assert.deepEqual(categories('Unspecified'), []);
+  console.log('10 data-integrity checks passed');
+}
+if (require.main === module) { if (process.argv.includes('--self-test')) selfTest(); else main(); }
+module.exports={listingURL,validate,categories,selfTest};
