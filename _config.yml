@@ -1,0 +1,11 @@
+# Preserve legacy source in Git while serving the current-location notice.
+exclude:
+  - "README.md"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "node_modules"
+  - "vendor/bundle/"
+  - "vendor/cache/"
+  - "vendor/gems/"
+  - "vendor/ruby/"
+  - "index-legacy.html"
